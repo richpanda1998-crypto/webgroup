@@ -5,17 +5,19 @@ import type { SafetyInfo } from "@/lib/types"
 
 interface SafetySectionProps {
   data: SafetyInfo | null
+  brokerName?: string
 }
 
-export function SafetySection({ data }: SafetySectionProps) {
+export function SafetySection({ data, brokerName }: SafetySectionProps) {
   const hasData = data && data.reasons && data.reasons.length > 0
+  const title = brokerName ? `Is ${brokerName} Safe?` : "Safety & Security"
 
   return (
     <Card className={!hasData ? "border-dashed" : ""}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Shield className="size-5" />
-          Safety & Security
+          {title}
         </CardTitle>
       </CardHeader>
       <CardContent>

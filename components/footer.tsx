@@ -44,12 +44,12 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="mb-4 flex items-center gap-2">
               <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <span className="text-lg font-bold">Z</span>
+                <span className="text-lg font-bold">C</span>
               </div>
-              <span className="text-xl font-bold">Zenpro FX</span>
+              <span className="text-xl font-bold">CAIZHIW FX</span>
             </Link>
             <p className="mb-4 text-sm text-muted-foreground">
-              Your trusted source for forex broker reviews and comparisons.
+              Independent forex broker reviews and ratings. Compare brokers, check licenses, and make informed trading decisions.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
@@ -86,10 +86,17 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t pt-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Zenpro FX. All rights reserved.</p>
+          <div className="mb-4 rounded-lg border border-warning/20 bg-warning/5 p-4">
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              <strong className="font-semibold text-foreground">Risk Warning:</strong> Trading forex and CFDs involves significant risk of loss. 
+              Leverage can work against you. This website provides information for educational purposes only and does not constitute investment advice. 
+              Always verify broker licenses and regulations before opening an account. Past performance is not indicative of future results.
+            </p>
+          </div>
+          <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
+            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} CAIZHIW FX. All rights reserved.</p>
             <p className="text-xs text-muted-foreground">
-              Disclaimer: Trading forex carries risk. Please trade responsibly.
+              Independent reviews • Unbiased ratings • Transparent comparisons
             </p>
           </div>
         </div>

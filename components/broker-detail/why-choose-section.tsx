@@ -4,18 +4,20 @@ import type { WhyChoose } from "@/lib/types"
 
 interface WhyChooseSectionProps {
   data: WhyChoose[] | null
+  brokerName?: string
 }
 
-export function WhyChooseSection({ data }: WhyChooseSectionProps) {
+export function WhyChooseSection({ data, brokerName }: WhyChooseSectionProps) {
   const hasData = data && data.length > 0
+  const title = brokerName ? `Why Choose ${brokerName}` : "Why Choose This Broker"
 
   return (
     <Card className={!hasData ? "border-dashed" : ""}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <h2 className="flex items-center gap-2 leading-none font-semibold" data-slot="card-title">
           <Target className="size-5" />
-          Why Choose This Broker
-        </CardTitle>
+          {title}
+        </h2>
       </CardHeader>
       <CardContent>
         {hasData ? (

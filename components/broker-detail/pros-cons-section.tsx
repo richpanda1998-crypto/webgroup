@@ -22,16 +22,20 @@ export function ProsConsSection({ data }: ProsConsSectionProps) {
           <div className="grid gap-6 md:grid-cols-2">
             {/* Pros */}
             {data.pros && data.pros.length > 0 && (
-              <div>
-                <h4 className="mb-3 flex items-center gap-2 font-semibold text-success">
-                  <Plus className="size-4" />
+              <div className="rounded-lg border border-success/20 bg-success/5 p-5">
+                <h4 className="mb-4 flex items-center gap-2 text-base font-semibold text-success">
+                  <div className="flex size-6 items-center justify-center rounded-full bg-success/20">
+                    <Plus className="size-4" />
+                  </div>
                   Advantages
                 </h4>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {data.pros.map((pro, index) => (
-                    <li key={index} className="flex gap-2 text-sm">
-                      <span className="text-success">✓</span>
-                      <span>{pro}</span>
+                    <li key={index} className="flex gap-3 text-sm leading-relaxed">
+                      <span className="mt-0.5 flex size-5 flex-shrink-0 items-center justify-center rounded-full bg-success/20 text-xs font-bold text-success">
+                        ✓
+                      </span>
+                      <span className="flex-1">{pro}</span>
                     </li>
                   ))}
                 </ul>
@@ -40,16 +44,20 @@ export function ProsConsSection({ data }: ProsConsSectionProps) {
 
             {/* Cons */}
             {data.cons && data.cons.length > 0 && (
-              <div>
-                <h4 className="mb-3 flex items-center gap-2 font-semibold text-destructive">
-                  <Minus className="size-4" />
+              <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-5">
+                <h4 className="mb-4 flex items-center gap-2 text-base font-semibold text-destructive">
+                  <div className="flex size-6 items-center justify-center rounded-full bg-destructive/20">
+                    <Minus className="size-4" />
+                  </div>
                   Disadvantages
                 </h4>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {data.cons.map((con, index) => (
-                    <li key={index} className="flex gap-2 text-sm">
-                      <span className="text-destructive">✗</span>
-                      <span>{con}</span>
+                    <li key={index} className="flex gap-3 text-sm leading-relaxed">
+                      <span className="mt-0.5 flex size-5 flex-shrink-0 items-center justify-center rounded-full bg-destructive/20 text-xs font-bold text-destructive">
+                        ✗
+                      </span>
+                      <span className="flex-1">{con}</span>
                     </li>
                   ))}
                 </ul>

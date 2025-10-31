@@ -5,13 +5,63 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Star, Shield, AlertTriangle, ExternalLink } from "lucide-react"
 import type { BrokerParsed } from "@/lib/types"
+import { brokerNameToSlug } from "@/lib/utils"
 
 interface BrokerCardProps {
   broker: BrokerParsed
 }
 
+function parseLicenseAbbr(licenseInfo?: string | null): { abbr: string; isLicensed: boolean } {
+  if (!licenseInfo || licenseInfo.trim() === "") {
+    return { abbr: "No License Info", isLicensed: false }
+  }
+  
+  try {
+    // Try to parse as JSON
+    if (licenseInfo.startsWith("[")) {
+      const parsed = JSON.parse(licenseInfo)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Extract abbreviations from English field or Chinese field
+        const abbrs = parsed
+          .map((item: any) => {
+            // Try English field first
+            if (item.abbreviation) return item.abbreviation
+            // Try to extract from Chinese field
+            if (item.监管状态) {
+              // Extract regulatory abbreviation from Chinese text
+              const match = item.监管状态.match(/([A-Z]+)/)
+              return match ? match[1] : ""
+            }
+            return ""
+          })
+          .filter((abbr: string) => abbr !== "")
+        if (abbrs.length > 0) {
+          return { abbr: abbrs.join(", "), isLicensed: true }
+        } else {
+          return { abbr: "Unregulated", isLicensed: false }
+        }
+      }
+    } else if (licenseInfo.startsWith("{")) {
+      const parsed = JSON.parse(licenseInfo)
+      if (parsed.abbreviation) {
+        return { abbr: parsed.abbreviation, isLicensed: true }
+      } else if (parsed.监管状态) {
+        const match = parsed.监管状态.match(/([A-Z]+)/)
+        const abbr = match ? match[1] : "Regulated"
+        return { abbr, isLicensed: true }
+      } else {
+        return { abbr: "Unregulated", isLicensed: false }
+      }
+    }
+  } catch (e) {
+    // If parsing fails, treat as unregulated
+    return { abbr: "Invalid License Data", isLicensed: false }
+  }
+  return { abbr: licenseInfo, isLicensed: true }
+}
+
 export function BrokerCard({ broker }: BrokerCardProps) {
-  const hasLicense = broker.license_info && broker.license_info.trim() !== ""
+  const { abbr: licenseAbbr, isLicensed } = parseLicenseAbbr(broker.license_info)
   const scoreColor =
     broker.total_score >= 8 ? "text-success" : broker.total_score >= 6 ? "text-warning" : "text-destructive"
 
@@ -51,7 +101,7 @@ export function BrokerCard({ broker }: BrokerCardProps) {
 
         {/* License Status */}
         <div className="mb-4">
-          {hasLicense ? (
+          {isLicensed ? (
             <Badge variant="outline" className="gap-1 border-success text-success">
               <Shield className="size-3" />
               Licensed
@@ -59,7 +109,7 @@ export function BrokerCard({ broker }: BrokerCardProps) {
           ) : (
             <Badge variant="outline" className="gap-1 border-destructive text-destructive">
               <AlertTriangle className="size-3" />
-              No License Info
+              Unregulated
             </Badge>
           )}
         </div>
@@ -70,26 +120,23 @@ export function BrokerCard({ broker }: BrokerCardProps) {
             <span className="text-muted-foreground">Operating Period:</span>
             <span className="font-medium">{broker.operating_period || "N/A"}</span>
           </div>
-          {broker.license_info && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">License:</span>
-              <span className="truncate pl-2 text-right font-medium" title={broker.license_info}>
-                {broker.license_info.length > 20 ? `${broker.license_info.substring(0, 20)}...` : broker.license_info}
+          <div className="flex justify-between items-center">
+            <span className="text-muted-foreground">License:</span>
+            {!isLicensed ? (
+              <span className="flex items-center gap-1 text-xs font-medium text-destructive">
+                <AlertTriangle className="size-3" />
+                {licenseAbbr}
               </span>
-            </div>
-          )}
+            ) : (
+              <span className="text-right font-medium text-sm">{licenseAbbr}</span>
+            )}
+          </div>
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-2 border-t p-4">
-        <Button asChild variant="outline" className="flex-1 bg-transparent" size="sm">
-          <Link href={`/broker/${broker.broker.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}`}>View Details</Link>
-        </Button>
-        <Button asChild className="flex-1" size="sm">
-          <a href={broker.official_link} target="_blank" rel="noopener noreferrer">
-            Visit Website
-            <ExternalLink className="ml-1 size-3" />
-          </a>
+      <CardFooter className="border-t p-4">
+        <Button asChild className="w-full" size="sm">
+          <Link href={`/broker/${brokerNameToSlug(broker.broker)}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>

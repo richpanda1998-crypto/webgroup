@@ -14,7 +14,7 @@ interface SearchPageProps {
 }
 
 export const metadata = {
-  title: "Search Brokers | Zenpro FX",
+  title: "Search Brokers | CAIZHIW FX",
   description: "Search and find forex brokers",
 }
 

@@ -35,17 +35,17 @@ function formatValue(value: any): string {
 
 function getFieldLabel(key: string): string {
   const labels: Record<string, string> = {
-    'Environment': '交易环境',
-    'Currency': '账户货币',
-    'Maximum Leverage': '最大杠杆',
-    'SupportedEA': '支持EA',
-    'Minimum Deposit': '最小入金',
-    'Minimum Spread': '最小点差',
-    'Depositing Method': '入金方式',
-    'Withdrawal Method': '出金方式',
-    'Minimum Position': '最小交易量',
-    'Commission': '佣金',
-    'Products': '交易产品',
+    'Environment': 'Trading Environment',
+    'Currency': 'Account Currency',
+    'Maximum Leverage': 'Maximum Leverage',
+    'SupportedEA': 'EA Support',
+    'Minimum Deposit': 'Minimum Deposit',
+    'Minimum Spread': 'Minimum Spread',
+    'Depositing Method': 'Deposit Methods',
+    'Withdrawal Method': 'Withdrawal Methods',
+    'Minimum Position': 'Minimum Position',
+    'Commission': 'Commission',
+    'Products': 'Trading Products',
   }
   return labels[key] || key
 }
@@ -56,7 +56,7 @@ export function AccountInfoSection({ broker }: AccountInfoSectionProps) {
   const visibleAccounts = accounts?.filter(acc => acc.is_visible) || []
   const hasValidAccounts = visibleAccounts.length > 0
 
-  // 合并所有账户的数据字段
+  // Merge all account data fields
   const allFields = new Map<string, any>()
   visibleAccounts.forEach(account => {
     Object.entries(account.data).forEach(([key, value]) => {
@@ -69,19 +69,19 @@ export function AccountInfoSection({ broker }: AccountInfoSectionProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <h2 className="flex items-center gap-2 leading-none font-semibold" data-slot="card-title">
           <Wallet className="size-5" />
           Account Information
-        </CardTitle>
+        </h2>
       </CardHeader>
       <CardContent>
         {hasValidAccounts ? (
           <div className="space-y-4">
-            {/* 显示提供的账户类型 */}
+            {/* Account Types Available */}
             <div className="rounded-lg border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Wallet className="size-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">提供账户类型</span>
+                <span className="text-sm font-medium text-muted-foreground">Account Types Available</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {visibleAccounts.map((account) => (
@@ -92,7 +92,7 @@ export function AccountInfoSection({ broker }: AccountInfoSectionProps) {
               </div>
             </div>
 
-            {/* 合并显示所有字段 */}
+            {/* Display all merged fields */}
             <div className="grid gap-3">
               {Array.from(allFields.entries()).map(([key, value]) => (
                 <div key={key} className="flex items-start justify-between gap-4 rounded-lg border bg-card p-3">

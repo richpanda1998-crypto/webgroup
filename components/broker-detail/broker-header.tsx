@@ -45,7 +45,7 @@ export function BrokerHeader({ broker }: BrokerHeaderProps) {
             <span className="text-sm text-muted-foreground">/ 10</span>
           </div>
           <Button asChild size="lg" className="w-full md:w-auto">
-            <a href={broker.official_link} target="_blank" rel="noopener noreferrer">
+            <a href={broker.official_link} target="_blank" rel="nofollow noopener noreferrer">
               Visit Official Website
               <ExternalLink className="ml-2 size-4" />
             </a>

@@ -10,7 +10,7 @@ export function OperatingDetailsSection({ broker }: OperatingDetailsSectionProps
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Broker Details</CardTitle>
+        <h2 className="text-lg leading-none font-semibold" data-slot="card-title">Broker Details</h2>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-start gap-3">

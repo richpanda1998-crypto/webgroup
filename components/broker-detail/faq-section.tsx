@@ -5,17 +5,19 @@ import type { FAQ } from "@/lib/types"
 
 interface FAQSectionProps {
   data: FAQ[] | null
+  brokerName?: string
 }
 
-export function FAQSection({ data }: FAQSectionProps) {
+export function FAQSection({ data, brokerName }: FAQSectionProps) {
   const hasData = data && data.length > 0
+  const title = brokerName ? `${brokerName} FAQ` : "Frequently Asked Questions"
 
   return (
     <Card className={!hasData ? "border-dashed" : ""}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <HelpCircle className="size-5" />
-          Frequently Asked Questions
+          {title}
         </CardTitle>
       </CardHeader>
       <CardContent>

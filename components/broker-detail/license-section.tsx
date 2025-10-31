@@ -9,8 +9,10 @@ interface LicenseSectionProps {
 }
 
 interface LicenseInfo {
-  监管状态: string
-  牌照信息: string
+  'Regulatory Status'?: string
+  'License Information'?: string
+  '监管状态'?: string  // Chinese fallback
+  '牌照信息'?: string  // Chinese fallback
 }
 
 function parseLicenseInfo(licenseStr: string): LicenseInfo[] | null {
@@ -30,10 +32,10 @@ export function LicenseSection({ broker }: LicenseSectionProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <h2 className="flex items-center gap-2 leading-none font-semibold" data-slot="card-title">
           <Shield className="size-5" />
           Regulatory License
-        </CardTitle>
+        </h2>
       </CardHeader>
       <CardContent>
         {hasValidLicense ? (
@@ -45,27 +47,40 @@ export function LicenseSection({ broker }: LicenseSectionProps) {
             </div>
             
             <div className="grid gap-3">
-              {licenses.map((license, index) => (
-                <div key={index} className="group rounded-lg border bg-card p-4 transition-all hover:border-success/30 hover:shadow-sm">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 space-y-2">
-                      <p className="font-medium leading-tight text-foreground">{license.牌照信息}</p>
-                      <div className="flex items-center gap-2">
-                        <div className="size-2 rounded-full bg-success"></div>
-                        <span className="text-sm text-muted-foreground">{license.监管状态}</span>
+              {licenses.map((license, index) => {
+                const licenseInfo = license['License Information'] || license['牌照信息'] || 'N/A'
+                const regulatoryStatus = license['Regulatory Status'] || license['监管状态'] || 'N/A'
+                
+                // Check if exceeded
+                const isExceeded = regulatoryStatus.toLowerCase().includes('exceeded') || 
+                                   regulatoryStatus.includes('超限')
+                
+                return (
+                  <div key={index} className={`group rounded-lg border bg-card p-4 transition-all hover:shadow-sm ${
+                    isExceeded ? 'hover:border-warning/30' : 'hover:border-success/30'
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 space-y-2">
+                        <p className="font-medium leading-tight text-foreground">{licenseInfo}</p>
+                        <div className="flex items-center gap-2">
+                          <div className={isExceeded ? 'size-2 rounded-full bg-warning' : 'size-2 rounded-full bg-success'}></div>
+                          <span className={isExceeded ? 'text-sm text-warning font-medium' : 'text-sm text-muted-foreground'}>
+                            {regulatoryStatus}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         ) : (
           <Alert variant="destructive">
             <AlertTriangle className="size-4" />
-            <AlertTitle>警告：暂未查证到有效监管信息</AlertTitle>
+            <AlertTitle>Warning: No Valid Regulatory Information Found</AlertTitle>
             <AlertDescription className="mt-2">
-              暂未查证到有效监管信息，请注意风险！
+              No valid regulatory information has been verified. Please be aware of the risks!
             </AlertDescription>
           </Alert>
         )}
