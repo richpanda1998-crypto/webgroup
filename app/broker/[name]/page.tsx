@@ -13,12 +13,12 @@ import { FAQSection } from "@/components/broker-detail/faq-section"
 import type { Metadata } from "next"
 
 interface BrokerPageProps {
-  params: Promise<{ code: string }>
+  params: Promise<{ name: string }>
 }
 
 export async function generateMetadata({ params }: BrokerPageProps): Promise<Metadata> {
-  const { code } = await params
-  const broker = await getBrokerByCode(code)
+  const { name } = await params
+  const broker = await getBrokerByCode(name)
 
   if (!broker) {
     return {
@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: BrokerPageProps): Promise<Met
 }
 
 export default async function BrokerPage({ params }: BrokerPageProps) {
-  const { code } = await params
-  const broker = await getBrokerByCode(code)
+  const { name } = await params
+  const broker = await getBrokerByCode(name)
 
   if (!broker) {
     notFound()
